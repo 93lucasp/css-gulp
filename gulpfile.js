@@ -5,31 +5,32 @@ const gulp = require('gulp'),
     rename = require('gulp-rename'),
     browserSync = require('browser-sync').create();
 
-gulp.task('css', function (cb) {
+function css() {
     return gulp.src('./src/assets/css/main.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(rename(function(path) {
+        .pipe(cleanCSS({ compatibility: 'ie8' }))
+        .pipe(rename(function (path) {
             path.extname = ".min.css";
         }))
         .pipe(gulp.dest('./public/assets/css/'))
         .pipe(browserSync.stream());
-})
-gulp.task('html', function () {
+}
+
+function html() {
     return gulp.src('./src/**/*.html')
         .pipe(gulp.dest('./public/'));
-})
-gulp.task('serve', function () {
+}
+
+function serve() {
     browserSync.init({
         server: {
             baseDir: './public'
         }
     })
-})
+}
 
-gulp.watch('./src/assets/css/**/*.scss', gulp.task('css'));
-gulp.watch('./src/*.html', gulp.task('html')).on('change', browserSync.reload);
+gulp.watch('./src/assets/css/**/*.scss', css);
+gulp.watch('./src/*.html', html).on('change', browserSync.reload);
 
-
-gulp.task('build', gulp.parallel('css', 'html', 'serve'));
+exports.default = gulp.parallel(html, css, serve);

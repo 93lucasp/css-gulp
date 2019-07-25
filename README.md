@@ -5,5 +5,5 @@
 ```
 
 ```
-  gulp build
+  gulp 
 ```
