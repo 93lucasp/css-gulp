@@ -3,6 +3,7 @@ const gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     cleanCSS = require('gulp-clean-css'),
     rename = require('gulp-rename'),
+    purgecss = require('gulp-purgecss')
     browserSync = require('browser-sync').create();
 
 function css() {
@@ -13,6 +14,11 @@ function css() {
         .pipe(rename(function (path) {
             path.extname = ".min.css";
         }))
+        .pipe(
+            purgecss({
+              content: ['public/**/*.html']
+            })
+          )
         .pipe(gulp.dest('./public/assets/css/'))
         .pipe(browserSync.stream());
 }
